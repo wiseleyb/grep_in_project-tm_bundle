@@ -5,9 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -rcgi
+	<string>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;beforeRunningCommand&lt;/key&gt;
+	&lt;string&gt;nop&lt;/string&gt;
+	&lt;key&gt;command&lt;/key&gt;
+	&lt;string&gt;#!/usr/bin/env ruby -rcgi
 
-# By Henrik Nyh &lt;http://henrik.nyh.se&gt; 2007-06-26
+# By Henrik Nyh &amp;lt;http://henrik.nyh.se&amp;gt; 2007-06-26
 # Free to modify and redistribute with credit.
 
 #Changes by Ben
@@ -17,8 +24,8 @@
 %w{ui web_preview escape}.each { |lib| require "%s/lib/%s" % [ENV['TM_SUPPORT_PATH'], lib] }
 
 NAME = "Grep in Project"
-HEAD  = &lt;&lt;-HTML
-  &lt;style type="text/css"&gt;
+HEAD  = &amp;lt;&amp;lt;-HTML
+  &amp;lt;style type="text/css"&amp;gt;
     table { font-size:0.9em; border-collapse:collapse; border-bottom:1px solid #555; }
     h2 { font-size:1.3em; }
     tr { background:#FFF; }
@@ -33,8 +40,8 @@ HEAD  = &lt;&lt;-HTML
     tr.newFile, tr.binary { border-top:1px solid #555; }
     .keyword { font-weight:bold; background:#F6D73A; margin:0 0.1em; }
     .ellipsis { color:#777; margin:0 0.5em; }
-  &lt;/style&gt;
-  &lt;script type="text/javascript"&gt;
+  &amp;lt;/style&amp;gt;
+  &amp;lt;script type="text/javascript"&amp;gt;
     function reveal_file(path) {
       const quote = '"';
       const command = "osascript -e ' tell app "+quote+"Finder"+quote+"' " +
@@ -67,21 +74,21 @@ HEAD  = &lt;&lt;-HTML
     var screenFitWidth = screen.width - 150;
     var screenFitHeight = screen.height - 150;
 
-    var setWidth = tableFitWidth &gt; screenFitWidth ? screenFitWidth : tableFitWidth;
-    var setHeight = tableFitHeight &gt; screenFitHeight ? screenFitHeight : tableFitHeight;  
-    setWidth = setWidth &lt; minWidth ? minWidth : setWidth;
-    setHeight = setHeight &lt; minHeight ? minHeight : setHeight;
+    var setWidth = tableFitWidth &amp;gt; screenFitWidth ? screenFitWidth : tableFitWidth;
+    var setHeight = tableFitHeight &amp;gt; screenFitHeight ? screenFitHeight : tableFitHeight;  
+    setWidth = setWidth &amp;lt; minWidth ? minWidth : setWidth;
+    setHeight = setHeight &amp;lt; minHeight ? minHeight : setHeight;
 
     window.resizeTo(setWidth, setHeight);
   }
   
-  &lt;/script&gt;
+  &amp;lt;/script&amp;gt;
 HTML
 
-RESIZE_TABLE = &lt;&lt;-HTML
-  &lt;script type="text/javascript"&gt;
+RESIZE_TABLE = &amp;lt;&amp;lt;-HTML
+  &amp;lt;script type="text/javascript"&amp;gt;
     resizeTableToFit();
-  &lt;/script&gt;
+  &amp;lt;/script&amp;gt;
 HTML
 
 def ellipsize_path(path)
@@ -93,32 +100,32 @@ def escape(string)
 end
 
 def bail(message)
-  puts &lt;&lt;-HTML
-    &lt;h2&gt;#{ message }&lt;/h2&gt;
+  puts &amp;lt;&amp;lt;-HTML
+    &amp;lt;h2&amp;gt;#{ message }&amp;lt;/h2&amp;gt;
   HTML
   html_footer
   exit
 end
 
 directory = ENV['TM_PROJECT_DIRECTORY'] || 
-            ( ENV['TM_FILEPATH'] &amp;&amp; File.dirname(ENV['TM_FILEPATH']) )
+            ( ENV['TM_FILEPATH'] &amp;amp;&amp;amp; File.dirname(ENV['TM_FILEPATH']) )
 
 puts html_head(
-  :window_title =&gt; NAME,
-  :page_title   =&gt; NAME,
-  :sub_title    =&gt; directory || "Error",
-  :html_head    =&gt; HEAD
+  :window_title =&amp;gt; NAME,
+  :page_title   =&amp;gt; NAME,
+  :sub_title    =&amp;gt; directory || "Error",
+  :html_head    =&amp;gt; HEAD
 )
 
 bail("Not in a saved file") unless directory
 
-query = TextMate::UI.request_string(:title =&gt; "Grep in Project", :prompt =&gt; "Find this:", :default =&gt; %x{pbpaste -pboard find})
+query = TextMate::UI.request_string(:title =&amp;gt; "Grep in Project", :prompt =&amp;gt; "Find this:", :default =&amp;gt; %x{pbpaste -pboard find})
 bail("Search aborted") unless query
 IO.popen('pbcopy -pboard find', 'w') { |copy| copy.print query }
 
-puts &lt;&lt;-HTML
-  &lt;h2&gt;Searching for “#{ escape(query) }”&lt;/h2&gt;
-  &lt;table&gt;
+puts &amp;lt;&amp;lt;-HTML
+  &amp;lt;h2&amp;gt;Searching for “#{ escape(query) }”&amp;lt;/h2&amp;gt;
+  &amp;lt;table&amp;gt;
 HTML
 
 # TODO: Respect ENV['TM_SELECTED_FILES']
@@ -135,14 +142,14 @@ IO.popen(command) do |pipe|
     if line =~ /^(Binary file )(.*?) matches/
       prefix, file = $1, $2
       path = directory + file[1..-1]
-      puts &lt;&lt;-HTML
-        &lt;tr class="binary #{ 'odd' unless i%2==0 }"&gt;
-          &lt;td&gt;
+      puts &amp;lt;&amp;lt;-HTML
+        &amp;lt;tr class="binary #{ 'odd' unless i%2==0 }"&amp;gt;
+          &amp;lt;td&amp;gt;
             #{ prefix }
-            &lt;a href="javascript:reveal_file('#{ escape(path) }')" title="#{ escape(path) }"&gt;#{ ellipsize_path(file) }&lt;/a&gt;
-          &lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-        &lt;/tr&gt;
+            &amp;lt;a href="javascript:reveal_file('#{ escape(path) }')" title="#{ escape(path) }"&amp;gt;#{ ellipsize_path(file) }&amp;lt;/a&amp;gt;
+          &amp;lt;/td&amp;gt;
+          &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+        &amp;lt;/tr&amp;gt;
         #{ RESIZE_TABLE if i%100==0 }
       HTML
       next
@@ -152,25 +159,25 @@ IO.popen(command) do |pipe|
 
       relative_path, line_number, content = $1, $2, $3.strip
       path = directory + relative_path[1..-1]
-      url = "txmt://open/?url=file://#{path}&amp;line=#{line_number}"
+      url = "txmt://open/?url=file://#{path}&amp;amp;line=#{line_number}"
       
       content = escape(content).
                   # Highlight keywords
-                  gsub(query_re) { %{&lt;strong class="keyword"&gt;#$&amp;&lt;/strong&gt;} }.
+                  gsub(query_re) { %{&amp;lt;strong class="keyword"&amp;gt;#$&amp;amp;&amp;lt;/strong&amp;gt;} }.
                   # Ellipsize before, between and after keywords
-                  gsub(%r{(^[^&lt;]{25}|&lt;/strong&gt;[^&lt;]{15})([^&lt;]{20,})([^&lt;]{15}&lt;strong|[^&lt;]{25}$)}) do
-                    %{#$1&lt;span class="ellipsis" title="#{escape($2)}"&gt;⋯&lt;/span&gt;#$3}
+                  gsub(%r{(^[^&amp;lt;]{25}|&amp;lt;/strong&amp;gt;[^&amp;lt;]{15})([^&amp;lt;]{20,})([^&amp;lt;]{15}&amp;lt;strong|[^&amp;lt;]{25}$)}) do
+                    %{#$1&amp;lt;span class="ellipsis" title="#{escape($2)}"&amp;gt;⋯&amp;lt;/span&amp;gt;#$3}
                   end
-      &lt;&lt;-HTML
+      &amp;lt;&amp;lt;-HTML
 
-        &lt;tr class="#{ 'odd' unless i%2==0 } #{ 'newFile' if (path != last_path) }"&gt;
-          &lt;td&gt;
-            &lt;a href="#{ url }" title="#{ "%s:%s" % [path, line_number] }"&gt;
+        &amp;lt;tr class="#{ 'odd' unless i%2==0 } #{ 'newFile' if (path != last_path) }"&amp;gt;
+          &amp;lt;td&amp;gt;
+            &amp;lt;a href="#{ url }" title="#{ "%s:%s" % [path, line_number] }"&amp;gt;
               #{ "%s:%s" % [ellipsize_path(relative_path), line_number] }
-            &lt;/a&gt;
-          &lt;/td&gt;
-          &lt;td&gt;#{ content }&lt;/td&gt;
-        &lt;/tr&gt;
+            &amp;lt;/a&amp;gt;
+          &amp;lt;/td&amp;gt;
+          &amp;lt;td&amp;gt;#{ content }&amp;lt;/td&amp;gt;
+        &amp;lt;/tr&amp;gt;
 
       HTML
     end
@@ -183,23 +190,36 @@ IO.popen(command) do |pipe|
     # A paragraph inside the table ends up at the top even though it's output
     # at the end. Something of a hack :)
     i += 1
-    puts &lt;&lt;-HTML
-      &lt;p&gt;#{i} matching line#{i==1 ? '' : 's'}:&lt;/p&gt;
+    puts &amp;lt;&amp;lt;-HTML
+      &amp;lt;p&amp;gt;#{i} matching line#{i==1 ? '' : 's'}:&amp;lt;/p&amp;gt;
       #{RESIZE_TABLE}
     HTML
   else
-    puts &lt;&lt;-HTML
-      &lt;tr id="empty"&gt;&lt;td colspan="2"&gt;No results.&lt;/td&gt;&lt;/tr&gt;
+    puts &amp;lt;&amp;lt;-HTML
+      &amp;lt;tr id="empty"&amp;gt;&amp;lt;td colspan="2"&amp;gt;No results.&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
     HTML
   end
     
 end
 
-puts &lt;&lt;-HTML
-&lt;/table&gt;
+puts &amp;lt;&amp;lt;-HTML
+&amp;lt;/table&amp;gt;
 HTML
 
 html_footer
+&lt;/string&gt;
+	&lt;key&gt;input&lt;/key&gt;
+	&lt;string&gt;none&lt;/string&gt;
+	&lt;key&gt;keyEquivalent&lt;/key&gt;
+	&lt;string&gt;@F&lt;/string&gt;
+	&lt;key&gt;name&lt;/key&gt;
+	&lt;string&gt;Grep in Project&lt;/string&gt;
+	&lt;key&gt;output&lt;/key&gt;
+	&lt;string&gt;showAsHTML&lt;/string&gt;
+	&lt;key&gt;uuid&lt;/key&gt;
+	&lt;string&gt;4B408A80-128A-4A15-9AF7-753981A61BC1&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -210,6 +230,6 @@ html_footer
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>4B408A80-128A-4A15-9AF7-753981A61BC1</string>
+	<string>3384AEA1-1AAE-4E88-B6BC-6029E9A1762A</string>
 </dict>
 </plist>
