@@ -1,2 +1,17 @@
-cd ~/Library/Application\ Support/TextMate/Bundles/
-git clone git://github.com/wiseleyb/grep_in_project-tm_bundle.git Grep.tmbundle
+Allows you to use grep to search your project (much faster than project find in Textmate for large project)
+
+99% of this is from http://henrik.nyh.se/2007/06/grep-in-project-command-for-textmate
+
+I just added some support to ignore tmp and log directories.
+
+To Install:
+
+	cd ~/Library/Application\ Support/TextMate/Bundles/
+	git clone git://github.com/wiseleyb/grep_in_project-tm_bundle.git Grep.tmbundle
+
+Restart Textmate
+
+To use:
+
+shift-command-f 
+
